@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title></title>
+  <style type="text/css">
+    *{
+      margin: 0;
+      padding: 0;
+    }
+    .hide{
+      display: none;;
+    }
+    .lines{
+      width: 10px;
+      height: 100px;
+      background: white;
+      margin-left: 195px; 
+      position: absolute;
+    }
+    .car{
+      width:50px;
+      height:70px;
+      background: red;
+      position: absolute;
+      bottom: 120px;
+    }
+    .gameArea{
+      width: 400px;
+      height: 100vh;
+      background: #2d3436;
+      margin: auto;
+      position: relative;
+      overflow: hidden;
+    }
+  </style>
+</head>
+<body>
+  <div class="carGame">
+    <div class="score"></div>
+    <div class="startScreen">
+      <p>Press to start<br>
+        press
+      </p>
+    </div>
+    <div class="gameArea hide"></div>
+  </div>
+
+  <script type="text/javascript">
+    const score = document.querySelector('.score');
+    const startScreen = document.querySelector('.startScreen');
+    const gameArea  = document.querySelector('.gameArea');
+    
+    console.log(gameArea);
+
+    startScreen.addEventListener('click' , start);
+
+    let player = {speed: 5};
+
+    let keys = { ArrowUp:false, ArrowDown:false, ArrowRight:false, ArrowLeft:false};
+
+    document.addEventListener('keydown', keyDown);
+    document.addEventListener('keyup', keyUp);
+
+    function keyDown(e){
+      e.preventDefault();
+      keys[e.key] = true;
+      console.log(e.key);
+      console.log(keys);
+
+    }
+
+    function keyUp(e){
+      e.preventDefault();
+      keys[e.key] = false;
+      console.log(e.key);
+       console.log(keys);
+    }
+
+    function gamePlay(){
+      console.log("Hey I'm clicked");
+      let car = document.querySelector('.car');
+      //now all 4 side of road
+      let road = gameArea.getBoundingClientRect();
+      console.log(road);
+
+      if(player.start){
+
+        if(keys.ArrowUp && player.y > (road.top+70)){player.y -= player.speed};
+        if(keys.ArrowDown && player.y < (road.bottom -70)){player.y += player.speed};
+        if(keys.ArrowLeft && player.x > 0){player.x -= player.speed};
+        if(keys.ArrowRight && player.x < (road.width - 50)) {player.x += player.speed};
+
+        car.style.top = player.y + "px";
+        car.style.left = player.x + "px";
+
+        window.requestAnimationFrame(gamePlay);
+      }
+    
+    }
+
+    function start(){
+      gameArea.classList.remove('hide');
+      startScreen.classList.add('hide');
+      player.start = true;
+      window.requestAnimationFrame(gamePlay);
+
+      //multiple road lines loop
+      for (x = 0; x < 5; x++) {
+      
+        //creating road line
+        let roadLine = document.createElement('div');
+        roadLine.setAttribute('class', 'lines');
+        roadLine.style.top = (x*150) + "px";
+        gameArea.appendChild(roadLine);
+
+      }
+
+    
+      let car = document.createElement('div');
+      car.setAttribute('class', 'car');
+      gameArea.appendChild(car);
+
+      player.x = car.offsetLeft;
+      player.y = car.offsetTop;
+
+      console.log("top pos" +car.offsetTop);
+      console.log("left pos" + car.offsetLeft);
+
+    }
+
+  </script>
+</body>
+</html>

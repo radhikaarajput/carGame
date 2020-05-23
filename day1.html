@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title></title>
+  <style type="text/css">
+    *{
+      margin: 0;
+      padding: 0;
+    }
+    .hide{
+      display: none;;
+    }
+    .car{
+      width:50px;
+      height:70px;
+      background: red;
+      position: absolute;
+      left: 50px;
+      bottom: 120px;
+    }
+  </style>
+</head>
+<body>
+  <div class="carGame">
+    <div class="score"></div>
+    <div class="startScreen">
+      <p>Press to start<br>
+        press
+      </p>
+    </div>
+    <div class="gameArea hide">Helo</div>
+  </div>
+
+  <script type="text/javascript">
+    const score = document.querySelector('.score');
+    const startScreen = document.querySelector('.startScreen');
+    const gameArea  = document.querySelector('.gameArea');
+    
+    console.log(gameArea);
+
+    startScreen.addEventListener('click' , start);
+
+    let player = {};
+
+    let keys = { ArrowUp:false, ArrowDown:false, ArrowRight:false, ArrowLeft:false};
+
+    document.addEventListener('keydown', keyDown);
+    document.addEventListener('keyup', keyUp);
+
+    function keyDown(e){
+      e.preventDefault();
+      keys[e.key] = true;
+      console.log(e.key);
+      console.log(keys);
+
+    }
+
+    function keyUp(e){
+      e.preventDefault();
+      keys[e.key] = false;
+      console.log(e.key);
+       console.log(keys);
+    }
+
+    function gamePlay(){
+      console.log("Hey I'm clicked");
+      if(player.start){
+        window.requestAnimationFrame(gamePlay);
+      }
+    
+    }
+
+    function start(){
+      gameArea.classList.remove('hide');
+      startScreen.classList.add('hide');
+      player.start = true;
+      window.requestAnimationFrame(gamePlay);
+
+      let car = document.createElement('div');
+      car.setAttribute('class', 'car');
+      gameArea.appendChild(car);
+    }
+
+  </script>
+</body>
+</html>
